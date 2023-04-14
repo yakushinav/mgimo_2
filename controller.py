@@ -1,4 +1,4 @@
-from joblib import dump, load
+from joblib import load
 import pandas as pd
 from view import VIEW
 from model import ML_MODEL
@@ -16,13 +16,20 @@ class BOT():
         dm.build_model()
 
     def get_recommentation(self):
+        #Загружаем скомпилированную модель
         self.model = load(self.model_file)
-        view=VIEW(self.csv_data)
+        #Создаем экземпляр view на основе очищенного набора данных
+        view=VIEW(self.clean_data)
+        # Читаем ввод пользователя
         X=view.get_user_data()
+        # Создаем набор данных для построения рекомендации
         x = pd.DataFrame(columns=X.keys())
         x.loc[0]=X.values()
+        # Вводим количество объектов в рекомендации
         k=view.get_objects_number()
+        # Строим рекомендацию
         y = self.model.kneighbors(x, return_distance=False, n_neighbors=k)
+        # Выводим найденные объекты на экран
         view.print_recomendation(y[0])
 
 

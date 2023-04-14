@@ -12,9 +12,12 @@ class VIEW():
         mratio=0
         simp=0
         for k in range(len(lst)):
+        # Нормализуем элемент списка значений категории
             normalized2 = lst[k].lower()
+        # Определяем близость текущего элемента списка значений категории и ввода пользователя
             matcher = difflib.SequenceMatcher(None, normalized1, normalized2)
             r= matcher.ratio()
+        # Ищем максимально близкий элемент списка значений категории (с самым высоким рейтингом)
             if r>mratio:
                 mratio=r
                 simp=k

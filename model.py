@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import LabelEncoder
-from joblib import dump, load
+from joblib import dump
 
 class ML_MODEL():
     def __init__(self,filename):
@@ -11,6 +11,11 @@ class ML_MODEL():
         self.df = pd.read_csv(filename)
 
     def get_clean_data(self):
+        # Данный метод:
+        # 1. Читает набор данных в csv
+        # 2. Выполняет очистку данных, чтобы не было пропусков и нечисловых полей
+        # 3. Сохраняет очищенный набор данных до преобразования категориальных данных в числа
+        # чтобы выдавать рекомендации с текстом
         # Данное поле содержит очень много пропусков, удаляем
         self.df.drop('society',axis=1,inplace=True)
         # Заменяем пропуски в данных
@@ -40,6 +45,8 @@ class ML_MODEL():
         return self.filename.split(".")[0] + "_clean.csv"
 
     def build_model(self):
+        # Строим модель обучения по методу ближайших соседей
+        # Сохраняем скомпилированную модель в файл
         self.model = NearestNeighbors(metric='cosine')
         self.model.fit(self.df)
         dump(self.model,"model.dump")
